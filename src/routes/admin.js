@@ -5,7 +5,7 @@ import path from 'path';
 
 const router = new Router({ prefix: '/api/admin' });
 
-const UPLOAD_DIR = process.env.OSS_UPLOAD_DIR || './uploads';
+const OSS_UPLOAD_DIR = process.env.OSS_UPLOAD_DIR || './uploads';
 
 router.post('/login', async (ctx) => {
   try {
@@ -207,10 +207,10 @@ router.post('/avatar', async (ctx) => {
 
     const fileExt = path.extname(originalFilename);
     const fileName = `avatar-${adminId}-${Date.now()}${fileExt}`;
-    const filePath = path.join(UPLOAD_DIR, fileName);
+    const filePath = path.join(OSS_UPLOAD_DIR, fileName);
 
-    if (!fs.existsSync(UPLOAD_DIR)) {
-      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+    if (!fs.existsSync(OSS_UPLOAD_DIR)) {
+      fs.mkdirSync(OSS_UPLOAD_DIR, { recursive: true });
     }
 
     if (filepath && fs.existsSync(filepath)) {
@@ -248,8 +248,7 @@ async function generateToken(admin) {
   const adminId = String(admin._id);
   const username = admin.username;
   const timestamp = Date.now();
-  const token = `${adminId}-${username}-${timestamp}`;
-  return token;
+  return `${adminId}-${username}-${timestamp}`;
 }
 
 export default router;

@@ -91,8 +91,8 @@ router.post('/submit', async (ctx) => {
         const fileName = `${uuidv4()}${fileExt}`;
         const objectName = `${OSS_UPLOAD_DIR}${fileName}`;
 
-        if (!fs.existsSync(UPLOAD_DIR)) {
-          fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+        if (!fs.existsSync(OSS_UPLOAD_DIR)) {
+          fs.mkdirSync(OSS_UPLOAD_DIR, { recursive: true });
         }
 
         // 移动文件并上传到 OSS
@@ -335,8 +335,8 @@ router.post('/upload', async (ctx) => {
     const fileName = `${uuidv4()}${fileExt}`;
     const objectName = `${OSS_UPLOAD_DIR}${fileName}`;
 
-    if (!fs.existsSync(UPLOAD_DIR)) {
-      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+    if (!fs.existsSync(OSS_UPLOAD_DIR)) {
+      fs.mkdirSync(OSS_UPLOAD_DIR, { recursive: true });
     }
 
     if (filepath && fs.existsSync(filepath)) {

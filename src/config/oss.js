@@ -14,7 +14,7 @@ export function getOSSClient() {
 
     // 检查必要配置
     if (!ossConfig.accessKeyId || !ossConfig.accessKeySecret || !ossConfig.bucket) {
-      throw new Error('OSS 配置缺失：请设置 OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET 环境变量');
+      throw new Error(`OSS 配置缺失：请设置 OSS_ACCESS_KEY_ID: ${ossConfig.accessKeyId}, OSS_ACCESS_KEY_SECRET: ${ossConfig.accessKeySecret}, OSS_BUCKET: ${ossConfig.bucket} 环境变量`);
     }
 
     ossClientInstance = new OSS(ossConfig);

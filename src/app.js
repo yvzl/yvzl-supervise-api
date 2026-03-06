@@ -22,7 +22,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors({
   origin: "*",
-  // credentials: true,
+  credentials: true,
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
   exposeHeaders: ['Content-Length'],

@@ -5,7 +5,7 @@ import path from 'path';
 
 const router = new Router({ prefix: '/api/admin' });
 
-const UPLOAD_DIR = process.env.UPLOAD_DIR || './uploads';
+const UPLOAD_DIR = process.env.OSS_UPLOAD_DIR || './uploads';
 
 router.post('/login', async (ctx) => {
   try {

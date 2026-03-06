@@ -57,7 +57,7 @@ app.use(async (ctx, next) => {
       return;
     }
   }
-  await next()
+  await next();
 });
 
 app.use(feedbackRouter.routes());

@@ -29,7 +29,10 @@ const allowedOrigins = new Set([
 app.use(cors({
   origin: (ctx) => {
     const origin = ctx.get('Origin');
-    return allowedOrigins.has(origin);
+    if (allowedOrigins.has(origin)) {
+      return origin;
+    }
+    return false;
   },
   credentials: true,
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

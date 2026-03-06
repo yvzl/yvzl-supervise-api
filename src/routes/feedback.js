@@ -3,7 +3,7 @@ import Feedback from '../models/Feedback.js';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import path from 'path';
-import { uploadLocalFileToOSS } from '../config/oss.js';
+import {uploadFileToOSS} from '../config/oss.js';
 
 const router = new Router({ prefix: '/api/feedback' });
 
@@ -89,7 +89,7 @@ router.post('/submit', async (ctx) => {
 
         // 直接上传到 OSS（koa-body 已处理为临时文件）
         if (filepath && fs.existsSync(filepath)) {
-          const ossUrl = await uploadLocalFileToOSS(filepath, objectName);
+          const ossUrl = await uploadFileToOSS(filepath, objectName);
           // 删除临时文件
           fs.unlinkSync(filepath);
 
@@ -329,7 +329,7 @@ router.post('/upload', async (ctx) => {
 
     // 直接上传到 OSS（koa-body 已处理为临时文件）
     if (filepath && fs.existsSync(filepath)) {
-      const ossUrl = await uploadLocalFileToOSS(filepath, objectName);
+      const ossUrl = await uploadFileToOSS(filepath, objectName);
       // 删除临时文件
       fs.unlinkSync(filepath);
 

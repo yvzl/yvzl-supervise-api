@@ -30,13 +30,14 @@ app.use(cors({
   origin: (ctx) => {
     const origin = ctx.get('Origin');
     if (allowedOrigins.has(origin)) {
-      return origin;
+      return true;
     }
     return false;
   },
   credentials: true,
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowHeaders: ['Content-Type', 'Authorization']
+  allowHeaders: ['Content-Type', 'Authorization'],
+  exposeHeaders: ['Content-Length'],
 }));
 
 app.use(koaBody({

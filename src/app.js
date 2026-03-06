@@ -1,9 +1,6 @@
 import Koa from 'koa';
 import { koaBody } from 'koa-body';
 import cors from 'koa-cors';
-import serve from 'koa-static';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 
 import { connectDB } from './config/database.js';
@@ -11,9 +8,6 @@ import feedbackRouter from './routes/feedback.js';
 import adminRouter from './routes/admin.js';
 
 dotenv.config();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = new Koa();
 
@@ -31,31 +25,9 @@ app.use(cors({
 app.use(koaBody({
   multipart: true,
   formidable: {
-    maxFileSize: 10 * 1024 * 1024,
-    uploadDir: path.join(__dirname, '../uploads')
+    maxFileSize: 10 * 1024 * 1024
   }
 }));
-
-// 静态文件服务
-const uploadsPath = path.resolve(__dirname, '../uploads');
-
-// 手动处理 /uploads 路由
-app.use(async (ctx, next) => {
-  if (ctx.path.startsWith('/uploads/')) {
-    const filePath = path.join(uploadsPath, path.basename(ctx.path));
-    
-    const fs = await import('fs');
-    if (fs.existsSync(filePath)) {
-      ctx.set('Content-Type', 'application/octet-stream');
-      ctx.body = fs.createReadStream(filePath);
-      return;
-    }
-    ctx.status = 404;
-    ctx.body = 'File not found';
-    return;
-  }
-  await next();
-});
 
 // Token 验证中间件 - 用于管理端接口
 app.use(async (ctx, next) => {

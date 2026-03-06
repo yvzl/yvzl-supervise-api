@@ -4,13 +4,15 @@ import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { uploadLocalFileToOSS } from '../config/oss.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const router = new Router({ prefix: '/api/feedback' });
 
-const UPLOAD_DIR = process.env.UPLOAD_DIR || './uploads';
+// OSS 配置
+const OSS_UPLOAD_DIR = process.env.OSS_UPLOAD_DIR || 'uploads/';
 
 // 允许的文件类型
 const ALLOWED_MIME_TYPES = [
@@ -87,20 +89,20 @@ router.post('/submit', async (ctx) => {
 
         const fileExt = path.extname(originalFilename);
         const fileName = `${uuidv4()}${fileExt}`;
-        const filePath = path.join(UPLOAD_DIR, fileName);
+        const objectName = `${OSS_UPLOAD_DIR}${fileName}`;
 
         if (!fs.existsSync(UPLOAD_DIR)) {
           fs.mkdirSync(UPLOAD_DIR, { recursive: true });
         }
 
-        // 移动文件
+        // 移动文件并上传到 OSS
         if (filepath && fs.existsSync(filepath)) {
-          const fileData = fs.readFileSync(filepath);
-          fs.writeFileSync(filePath, fileData);
+          const ossUrl = await uploadLocalFileToOSS(filepath, objectName);
+          // 删除临时文件
           fs.unlinkSync(filepath);
 
           attachments.push({
-            url: `/uploads/${fileName}`,
+            url: ossUrl,
             name: originalFilename,
             type: mimetype
           });
@@ -331,26 +333,26 @@ router.post('/upload', async (ctx) => {
 
     const fileExt = path.extname(originalFilename);
     const fileName = `${uuidv4()}${fileExt}`;
-    const filePath = path.join(UPLOAD_DIR, fileName);
+    const objectName = `${OSS_UPLOAD_DIR}${fileName}`;
 
     if (!fs.existsSync(UPLOAD_DIR)) {
       fs.mkdirSync(UPLOAD_DIR, { recursive: true });
     }
 
     if (filepath && fs.existsSync(filepath)) {
-      const fileData = fs.readFileSync(filepath);
-      fs.writeFileSync(filePath, fileData);
+      const ossUrl = await uploadLocalFileToOSS(filepath, objectName);
+      // 删除临时文件
       fs.unlinkSync(filepath);
-    }
 
-    ctx.body = {
-      success: true,
-      data: {
-        url: `/uploads/${fileName}`,
-        name: originalFilename,
-        type: mimetype
-      }
-    };
+      ctx.body = {
+        success: true,
+        data: {
+          url: ossUrl,
+          name: originalFilename,
+          type: mimetype
+        }
+      };
+    }
   } catch (error) {
     console.error('Upload error:', error);
     ctx.status = 500;

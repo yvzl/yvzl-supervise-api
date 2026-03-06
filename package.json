@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@vercel/node": "^5.6.11",
+    "ali-oss": "^6.23.0",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.1",
     "koa": "^2.15.0",

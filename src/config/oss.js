@@ -7,9 +7,9 @@ export function getOSSClient() {
   if (!ossClientInstance) {
     const ossConfig = {
       region: process.env.OSS_REGION || 'oss-cn-hangzhou',
-      accessKeyId: process.env.OSS_ACCESS_KEY_ID,
-      accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
-      bucket: process.env.OSS_BUCKET
+      accessKeyId: process.env.NEXT_PUBLIC_OSS_ACCESS_KEY_ID,
+      accessKeySecret: process.env.NEXT_PUBLIC_OSS_ACCESS_KEY_SECRET,
+      bucket: process.env.NEXT_PUBLIC_OSS_BUCKET
     };
 
     // 检查必要配置

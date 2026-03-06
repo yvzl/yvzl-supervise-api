@@ -3,11 +3,7 @@ import Feedback from '../models/Feedback.js';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { uploadLocalFileToOSS } from '../config/oss.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const router = new Router({ prefix: '/api/feedback' });
 
@@ -91,11 +87,7 @@ router.post('/submit', async (ctx) => {
         const fileName = `${uuidv4()}${fileExt}`;
         const objectName = `${OSS_UPLOAD_DIR}${fileName}`;
 
-        if (!fs.existsSync(OSS_UPLOAD_DIR)) {
-          fs.mkdirSync(OSS_UPLOAD_DIR, { recursive: true });
-        }
-
-        // 移动文件并上传到 OSS
+        // 直接上传到 OSS（koa-body 已处理为临时文件）
         if (filepath && fs.existsSync(filepath)) {
           const ossUrl = await uploadLocalFileToOSS(filepath, objectName);
           // 删除临时文件
@@ -335,10 +327,7 @@ router.post('/upload', async (ctx) => {
     const fileName = `${uuidv4()}${fileExt}`;
     const objectName = `${OSS_UPLOAD_DIR}${fileName}`;
 
-    if (!fs.existsSync(OSS_UPLOAD_DIR)) {
-      fs.mkdirSync(OSS_UPLOAD_DIR, { recursive: true });
-    }
-
+    // 直接上传到 OSS（koa-body 已处理为临时文件）
     if (filepath && fs.existsSync(filepath)) {
       const ossUrl = await uploadLocalFileToOSS(filepath, objectName);
       // 删除临时文件

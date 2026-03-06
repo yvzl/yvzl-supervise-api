@@ -148,3 +148,5 @@ async function initializeAdmin() {
 }
 
 start().catch(console.error);
+
+export default app.callback()

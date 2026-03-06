@@ -19,22 +19,10 @@ const app = new Koa();
 
 const PORT = process.env.PORT || 3000;
 
-const allowedOrigins = new Set([
-  'https://feedback.yvzl.top/',
-  'https://admin.yvzl.top/',
-  'http://localhost:3001/',
-  'http://localhost:3002/'
-]);
 
 app.use(cors({
-  origin: (ctx) => {
-    const origin = ctx.get('Origin');
-    if (allowedOrigins.has(origin)) {
-      return origin;
-    }
-    return false;
-  },
-  credentials: true,
+  origin: "*",
+  // credentials: true,
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
   exposeHeaders: ['Content-Length'],

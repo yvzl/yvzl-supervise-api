@@ -1,0 +1,24 @@
+{
+  "name": "supervise-api",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js"
+  },
+  "dependencies": {
+    "koa": "^2.15.0",
+    "koa-body": "^6.0.1",
+    "koa-cors": "^0.0.16",
+    "koa-router": "^12.0.1",
+    "koa-static": "^5.0.0",
+    "mongoose": "^8.1.1",
+    "dayjs": "^1.11.10",
+    "uuid": "^9.0.1",
+    "dotenv": "^16.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}

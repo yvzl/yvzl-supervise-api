@@ -14,7 +14,8 @@ export function getOSSClient() {
 
     // 检查必要配置
     if (!ossConfig.accessKeyId || !ossConfig.accessKeySecret || !ossConfig.bucket) {
-      throw new Error("accessKeyId、accessKeySecret、bucket 必填");
+      // throw new Error("accessKeyId、accessKeySecret、bucket 必填");
+      throw new Error(process.env);
     }
 
     ossClientInstance = new OSS(ossConfig);

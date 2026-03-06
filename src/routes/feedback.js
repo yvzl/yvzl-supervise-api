@@ -27,7 +27,6 @@ const ALLOWED_MIME_TYPES = [
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 router.post('/submit', async (ctx) => {
-  console.log("submit")
   try {
     const { title, content, type, nickname, phone, location, date } = ctx.request.body;
 

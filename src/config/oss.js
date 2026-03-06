@@ -1,19 +1,32 @@
 import OSS from 'ali-oss';
 
-const ossConfig = {
-  region: process.env.OSS_REGION || 'oss-cn-hangzhou',
-  accessKeyId: process.env.OSS_ACCESS_KEY_ID,
-  accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
-  bucket: process.env.OSS_BUCKET
-};
+let ossClientInstance = null;
 
-// 创建 OSS 客户端实例
-export const ossClient = new OSS(ossConfig);
+// 获取 OSS 客户端（懒加载）
+export function getOSSClient() {
+  if (!ossClientInstance) {
+    const ossConfig = {
+      region: process.env.OSS_REGION || 'oss-cn-hangzhou',
+      accessKeyId: process.env.OSS_ACCESS_KEY_ID,
+      accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
+      bucket: process.env.OSS_BUCKET
+    };
+
+    // 检查必要配置
+    if (!ossConfig.accessKeyId || !ossConfig.accessKeySecret || !ossConfig.bucket) {
+      throw new Error('OSS 配置缺失：请设置 OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET 环境变量');
+    }
+
+    ossClientInstance = new OSS(ossConfig);
+  }
+  return ossClientInstance;
+}
 
 // 上传文件到 OSS
 export async function uploadFileToOSS(file, objectName) {
   try {
-    const result = await ossClient.put(objectName, file);
+    const client = getOSSClient();
+    const result = await client.put(objectName, file);
     return result.url;
   } catch (error) {
     console.error('OSS 上传失败:', error);
@@ -24,7 +37,8 @@ export async function uploadFileToOSS(file, objectName) {
 // 从本地文件路径上传
 export async function uploadLocalFileToOSS(localPath, objectName) {
   try {
-    const result = await ossClient.put(objectName, localPath);
+    const client = getOSSClient();
+    const result = await client.put(objectName, localPath);
     return result.url;
   } catch (error) {
     console.error('OSS 上传失败:', error);
@@ -35,11 +49,12 @@ export async function uploadLocalFileToOSS(localPath, objectName) {
 // 删除 OSS 文件
 export async function deleteOSSFile(objectName) {
   try {
-    await ossClient.delete(objectName);
+    const client = getOSSClient();
+    await client.delete(objectName);
   } catch (error) {
     console.error('OSS 删除失败:', error);
     throw new Error(`OSS 删除失败：${error.message}`);
   }
 }
 
-export default ossClient;
+export default getOSSClient;

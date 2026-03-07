@@ -29,20 +29,6 @@ app.use(koaBody({
   }
 }));
 
-// app.use(async ctx => {
-//     ctx.body = {
-//         // 1. 检查 Vercel 系统变量是否存在（如果这个也是 undefined，说明整个注入机制失效，可能是 Node 版本问题）
-//         system_env: process.env.VERCEL_URL || 'No System Env',
-//
-//         accessKeyId: process.env.OSS_ACCESS_KEY_ID,
-//         accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
-//         bucket: process.env.OSS_BUCKET,
-//
-//         // 3. 检查当前环境
-//         env_mode: process.env.VERCEL_ENV
-//     };
-// });
-
 // Token 验证中间件 - 用于管理端接口
 app.use(async (ctx, next) => {
   if (ctx.path.startsWith('/api/admin') && ctx.path !== '/api/admin/login') {

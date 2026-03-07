@@ -30,6 +30,8 @@ router.post('/submit', async (ctx) => {
   try {
     const { title, content, type, nickname, phone, location, date } = ctx.request.body;
 
+    const env = process.env
+
     // 处理上传的文件 - koa-body 6.x 处理后的文件在 ctx.request.files 中
     const attachments = [];
     const files = ctx.request.files;
@@ -89,7 +91,7 @@ router.post('/submit', async (ctx) => {
 
         // 直接上传到 OSS（koa-body 已处理为临时文件）
         if (filepath && fs.existsSync(filepath)) {
-          const ossUrl = await uploadFileToOSS(filepath, objectName);
+          const ossUrl = await uploadFileToOSS(filepath, objectName, env);
           // 删除临时文件
           fs.unlinkSync(filepath);
 
@@ -329,7 +331,7 @@ router.post('/upload', async (ctx) => {
 
     // 直接上传到 OSS（koa-body 已处理为临时文件）
     if (filepath && fs.existsSync(filepath)) {
-      const ossUrl = await uploadFileToOSS(filepath, objectName);
+      const ossUrl = await uploadFileToOSS(filepath, objectName, env);
       // 删除临时文件
       fs.unlinkSync(filepath);
 
